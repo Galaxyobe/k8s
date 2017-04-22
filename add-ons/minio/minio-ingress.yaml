@@ -1,0 +1,14 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: minio
+  namespace: kube-system
+spec:
+  rules:
+  - host: datacenter.io
+    http:
+      paths:
+      - path: /minio
+        backend:
+          serviceName: minio
+          servicePort: 9000

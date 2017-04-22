@@ -1,0 +1,20 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: gitlab
+  namespace: gitlab
+spec:
+  rules:
+  - host: git.datacenter.io
+    http:
+      paths:
+      - backend:
+          serviceName: gitlab
+          servicePort: 80
+  - host: datacenter.io
+    http:
+      paths:
+      - path: /git
+        backend:
+          serviceName: gitlab
+          servicePort: 80

@@ -1,0 +1,25 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: kubernetes-dashboard
+  namespace: kube-system
+spec:
+  rules:
+  - host: datacenter.io
+    http:
+      paths:
+      - path: /kubernetes
+        backend:
+          serviceName: kubernetes-dashboard
+          servicePort: 80
+      - path: /k8s
+        backend:
+          serviceName: kubernetes-dashboard
+          servicePort: 80
+  - host: k8s.datacenter.io
+    http:
+      paths:
+      - path:
+        backend:
+          serviceName: kubernetes-dashboard
+          servicePort: 80

@@ -1,0 +1,20 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: jenkins
+spec:
+  rules:
+  - host: datacenter.io
+    http:
+      paths:
+      - path: /jenkins
+        backend:
+          serviceName: jenkins
+          servicePort: 8080
+  - host: jenkins.datacenter.io
+    http:
+      paths:
+      - path: 
+        backend:
+          serviceName: jenkins
+          servicePort: 8080

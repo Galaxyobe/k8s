@@ -1,0 +1,37 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: minio
+  namespace: kube-system
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: minio
+        app: minio
+    spec:
+      nodeSelector:
+        NodeType: Master
+      containers:
+      - name: minio
+        image: minio/minio:latest
+        args: ["server","/export"]
+        resources:
+          limits:
+            cpu: 100m
+            memory: 200Mi
+          requests:
+            cpu: 100m
+            memory: 200Mi
+        volumeMounts:
+        - name: data-store
+          mountPath: /export
+        ports:
+        - containerPort: 9000
+          name: http
+          protocol: TCP
+      volumes:
+      - name: data-store
+        hostPath:
+         path: /data/minio

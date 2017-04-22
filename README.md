@@ -55,7 +55,7 @@
 
 ## 首次安装
 
-> $ sudo apt-get install ebtables
+> $ sudo apt-get install ebtables socat
 
 > $ sudo kubeadm init
 
@@ -75,6 +75,21 @@
 
 > $ sudo rm -rf /var/lib/kubelet /etc/kubernetes /var/lib/etcd /etc/cni;
 
+#### 网络清除
+
+#### on master and nodes
+
+> $ sudo rm -rf /var/lib/cni
+
+> $ sudo rm -rf /run/flannel
+
+> $ sudo ifconfig cni0 down
+
+> $ sudo brctl delbr cni0
+
+> $ sudo rm -rf /etc/cni
+
+> $ sudo ip link delete flannel.1
 
 ## 再次安装
 	
@@ -333,3 +348,4 @@
 #### 我们可以查看其暴露出的 NodePoint，可局域网可访问
 
 > $ kubectl describe svc kubernetes-dashboard -n kube-system
+

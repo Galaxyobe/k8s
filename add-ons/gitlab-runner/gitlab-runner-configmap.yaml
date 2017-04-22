@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: gitlab-runner
+  namespace: gitlab
+data:
+  config.toml: |
+    concurrent = 4
+
+    [[runners]]
+      name = "Kubernetes Runner"
+      url = "http://gitlab.gitlab/ci/"
+      token = "vr6Qxuttz8Dgk65Vv3-A"
+      executor = "kubernetes"
+      [runners.kubernetes]
+        namespace = "gitlab"
+        privileged = true
+        disable_cache = false
+        volumes = ["/cache"]
+      [runners.cache]
+        Type = "s3"
+        ServerAddress = "http://minio.gitlab/"
+        AccessKey = "XDGXOEQKU2EHXPK2TBUU"
+        SecretKey = "hJPFrc3e/qrMKDzynNCphGyNS9HX8DQX+vmzYyuP"
+        BucketName = "runner"

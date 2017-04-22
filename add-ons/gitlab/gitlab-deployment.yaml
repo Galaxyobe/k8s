@@ -1,0 +1,65 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: gitlab
+  namespace: gitlab
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: gitlab
+        app: gitlab
+    spec:
+      nodeSelector:
+        NodeType: Master
+      containers:
+      - name: gitlab
+        image: twang2218/gitlab-ce-zh:9.0.5
+        imagePullPolicy: IfNotPresent
+        resources:
+          limits:
+            memory: 5G
+        env:
+        - name: TZ
+          value: Asia/Shanghai
+        - name: GITLAB_OMNIBUS_CONFIG
+          value: gitlab_rails['time_zone'] = 'Asia/Shanghai'
+        - name: DEBUG
+          value: "false"
+        ports:
+        - name: http
+          containerPort: 80
+          protocol: TCP
+        - name: ssh
+          containerPort: 22
+          protocol: TCP
+        volumeMounts:
+        - name: config
+          mountPath: /etc/gitlab
+        - name: data
+          mountPath: /var/opt/gitlab
+        - name: logs
+          mountPath: /var/log/gitlab
+        livenessProbe:
+          httpGet:
+            path: /users/sign_in
+            port: 80
+          initialDelaySeconds: 180
+          timeoutSeconds: 120
+        readinessProbe:
+          httpGet:
+            path: /users/sign_in
+            port: 80
+          initialDelaySeconds: 160
+          timeoutSeconds: 120
+      volumes:
+      - name: config
+        hostPath:
+         path: /etc/gitlab
+      - name: data
+        hostPath:
+         path: /data/gitlab
+      - name: logs
+        hostPath:
+         path: /var/log/gitlab
